@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import Todo from "../../Model/Todo"
 import TodoItem from "./TodoItem/TodoItem"
 import { allAction } from "../../Redux/allAction"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import Modal from "../../Model/Modal"
 import { SORT_TYPE } from "../../Enum/SORT_TYPE"
