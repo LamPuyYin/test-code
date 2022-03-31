@@ -1,7 +1,8 @@
-import { Reducer } from "react"
+import { Reducer, useState } from "react"
 import Todo from "../../Model/Todo"
 import { allAction } from "../allAction"
-import todo from "../../Model/Todo"
+import { SORT_TYPE } from "../../Enum/SORT_TYPE"
+import { FILTER_TYPE } from "../../Enum/FILTER_TYPE"
 
 interface actionTypes {
   type: string
@@ -10,10 +11,14 @@ interface actionTypes {
 
 export interface todoInitStateType {
   allTodo: Todo[]
+  sortType: SORT_TYPE
+  filterType: FILTER_TYPE
 }
 
 const initialState: todoInitStateType = {
-  allTodo: [new Todo("a"), new Todo("b")],
+  allTodo: [new Todo("a", new Date()), new Todo("b", new Date())],
+  sortType: SORT_TYPE.CREATE_DATE,
+  filterType: FILTER_TYPE.NONE,
 }
 
 const addItem = (state: Todo[], todo: Todo | string): Todo[] => {
@@ -22,13 +27,13 @@ const addItem = (state: Todo[], todo: Todo | string): Todo[] => {
   if (todo instanceof Todo) {
     newTodo.push(todo)
   }
-
   return newTodo
 }
 
 const deleteItem = (state: Todo[], todoID: Todo | string): Todo[] => {
   if (typeof todoID === "string") {
-    return state.filter((e) => e.id !== todoID)
+    const newTodo = state.filter((e) => e.id !== todoID)
+    return newTodo
   }
   return state
 }
@@ -85,6 +90,18 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
       return {
         ...state,
         allTodo: setItemFinish(state.allTodo, action.data),
+      }
+
+    case allAction.SORTING:
+      return {
+        ...state,
+        sortType: action.data,
+      }
+
+    case allAction.FILTERING:
+      return {
+        ...state,
+        filterType: action.data,
       }
     default:
       return state

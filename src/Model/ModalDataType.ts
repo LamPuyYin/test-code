@@ -5,3 +5,7 @@ export interface DeleteTodoModalDataType {
 export interface EditTodoModalDataType {
   editID: string
 }
+
+export interface CreateTodoModalDataType {
+  createText: string
+}

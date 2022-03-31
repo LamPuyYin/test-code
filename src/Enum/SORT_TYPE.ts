@@ -1,0 +1,7 @@
+export enum SORT_TYPE {
+  NAME,
+  CREATE_DATE,
+  DEAD_NEW_TO_OLD,
+  DEAD_OLD_TO_NEW,
+  FINISHED,
+}

@@ -2,6 +2,7 @@ import { allAction } from "../allAction"
 import Modal from "../../Model/Modal"
 import { Reducer } from "react"
 import {
+  CreateTodoModalDataType,
   DeleteTodoModalDataType,
   EditTodoModalDataType,
 } from "../../Model/ModalDataType"
@@ -14,7 +15,11 @@ interface actionTypes {
 
 export interface modalInitStateType {
   Modal: Modal
-  data: DeleteTodoModalDataType | EditTodoModalDataType | null
+  data:
+    | DeleteTodoModalDataType
+    | EditTodoModalDataType
+    | CreateTodoModalDataType
+    | null
 }
 
 const initialState: modalInitStateType = {

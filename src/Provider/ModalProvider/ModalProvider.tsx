@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import { ApplicationState } from "../../Redux/reducers/rootReducer"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import EditTodoModal from "../../Component/Modal/EditTodoModal"
+import CreateTodoModal from "../../Component/Modal/CreateTodoModal"
 
 const ModalProvider: React.FC = (props: any) => {
   const isOpen = useSelector(
@@ -24,6 +25,12 @@ const ModalProvider: React.FC = (props: any) => {
     return (
       <>
         <EditTodoModal />
+      </>
+    )
+  else if (isOpen && modalName === MODAL_TYPE.CREATE_TODO)
+    return (
+      <>
+        <CreateTodoModal />
       </>
     )
   return <div />

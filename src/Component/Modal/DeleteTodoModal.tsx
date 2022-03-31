@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { allAction } from "../../Redux/allAction"
 import { ApplicationState } from "../../Redux/reducers/rootReducer"
+import Todo from "../../Model/Todo"
 
 const DeleteTodoModal: React.FC = (props: any) => {
   const dispatch = useDispatch()
@@ -9,6 +10,15 @@ const DeleteTodoModal: React.FC = (props: any) => {
   const ModalData = useSelector((state: ApplicationState) => {
     return state.modalControllerReducer.data
   })
+
+  const todos = useSelector((state: ApplicationState) => {
+    return state.todoReducer.allTodo
+  })
+
+  let index = -1
+  index = todos.findIndex((e) => e.id === ModalData?.valueOf())
+
+  const cloneArr: Todo[] = [...todos]
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -33,7 +43,7 @@ const DeleteTodoModal: React.FC = (props: any) => {
           <div>
             Are you sure you want to remove
             <div className="py-1 px-2 border-gray-200 border rounded-lg my-2">
-              {"#" + ModalData}
+              {cloneArr[index].infoFormat()} ?
             </div>
           </div>
           <div className="modal-action">
@@ -48,7 +58,7 @@ const DeleteTodoModal: React.FC = (props: any) => {
             </button>
 
             <button onClick={() => closeModal()}>
-              <label htmlFor="my-modal-2" className="btn">
+              <label htmlFor="my-modal-2" className="btn btn-ghost">
                 Close
               </label>
             </button>
