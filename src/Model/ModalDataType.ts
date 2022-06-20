@@ -1,3 +1,5 @@
+import DateFilterModal from "../Component/Modal/DateFilterModal"
+
 export interface DeleteTodoModalDataType {
   removeID: string
 }
@@ -8,4 +10,8 @@ export interface EditTodoModalDataType {
 
 export interface CreateTodoModalDataType {
   createText: string
+}
+
+export interface DateFilterModalDataType {
+  firstItemDate: Date
 }

@@ -4,4 +4,5 @@ export enum SORT_TYPE {
   DEAD_NEW_TO_OLD,
   DEAD_OLD_TO_NEW,
   FINISHED,
+  TAGS,
 }

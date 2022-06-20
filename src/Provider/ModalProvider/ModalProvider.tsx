@@ -5,6 +5,7 @@ import { ApplicationState } from "../../Redux/reducers/rootReducer"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import EditTodoModal from "../../Component/Modal/EditTodoModal"
 import CreateTodoModal from "../../Component/Modal/CreateTodoModal"
+import DateFilterModal from "../../Component/Modal/DateFilterModal"
 
 const ModalProvider: React.FC = (props: any) => {
   const isOpen = useSelector(
@@ -31,6 +32,12 @@ const ModalProvider: React.FC = (props: any) => {
     return (
       <>
         <CreateTodoModal />
+      </>
+    )
+  else if (isOpen && modalName === MODAL_TYPE.DATE_FILTER)
+    return (
+      <>
+        <DateFilterModal />
       </>
     )
   return <div />

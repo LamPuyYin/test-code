@@ -40,9 +40,9 @@ const DeleteTodoModal: React.FC = (props: any) => {
       <input type="checkbox" id="my-modal-2" className="modal-toggle" />
       <div className={["modal", "modal-open"].join(" ")}>
         <div className="modal-box">
-          <div>
+          <div className="p-4 mb-4 text-bold text-xl">
             Are you sure you want to remove
-            <div className="py-1 px-2 border-gray-200 border rounded-lg my-2">
+            <div className="mt-4 text-lg py-1 px-2 border-gray-200 border rounded-lg my-2">
               {cloneArr[index].infoFormat()} ?
             </div>
           </div>
@@ -50,9 +50,10 @@ const DeleteTodoModal: React.FC = (props: any) => {
             <button onClick={() => confirmRemove()}>
               <label
                 htmlFor="my-modal-2"
-                className={["btn btn-primary", isLoading ? "loading" : ""].join(
-                  " "
-                )}>
+                className={[
+                  "btn btn-primary px-10",
+                  isLoading ? "loading" : "",
+                ].join(" ")}>
                 Confirm
               </label>
             </button>

@@ -3,6 +3,7 @@ import Todo from "../../Model/Todo"
 import { allAction } from "../allAction"
 import { SORT_TYPE } from "../../Enum/SORT_TYPE"
 import { FILTER_TYPE } from "../../Enum/FILTER_TYPE"
+import { allTagNames } from "../../Model/allTagNames"
 
 interface actionTypes {
   type: string
@@ -13,12 +14,17 @@ export interface todoInitStateType {
   allTodo: Todo[]
   sortType: SORT_TYPE
   filterType: FILTER_TYPE
+  filterRange: [Date, Date]
 }
 
 const initialState: todoInitStateType = {
-  allTodo: [new Todo("a", new Date()), new Todo("b", new Date())],
+  allTodo: [
+    new Todo("a", new Date(), allTagNames.OFFICE),
+    new Todo("b", new Date(), allTagNames.TEST),
+  ],
   sortType: SORT_TYPE.CREATE_DATE,
   filterType: FILTER_TYPE.NONE,
+  filterRange: [new Date(), new Date()],
 }
 
 const addItem = (state: Todo[], todo: Todo | string): Todo[] => {
@@ -102,6 +108,11 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
       return {
         ...state,
         filterType: action.data,
+      }
+    case allAction.FILTER_RANGE:
+      return {
+        ...state,
+        filterRange: action.data,
       }
     default:
       return state

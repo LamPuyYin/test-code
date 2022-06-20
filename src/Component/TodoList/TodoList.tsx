@@ -9,17 +9,22 @@ import Modal from "../../Model/Modal"
 import { SORT_TYPE } from "../../Enum/SORT_TYPE"
 import { FILTER_TYPE } from "../../Enum/FILTER_TYPE"
 import { ApplicationState } from "../../Redux/reducers/rootReducer"
-import { sortItem, filterItem } from "../../HelperFunction/TodoHelperFunction"
+import {
+  filterDate,
+  filterItem,
+  sortItem,
+} from "../../HelperFunction/TodoHelperFunction"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
   const dispatch = useDispatch()
 
   const [newItemName, setNewItemName] = useState<string>("")
-  const [sortedTodo, setSortedTodo] = useState<Todo[]>([])
 
   const todos = useSelector((state: ApplicationState) => {
     return state.todoReducer.allTodo
   })
+
+  const [sortedTodo, setSortedTodo] = useState<Todo[]>(todos)
 
   const sortType = useSelector((state: ApplicationState) => {
     return state.todoReducer.sortType
@@ -29,17 +34,28 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     return state.todoReducer.filterType
   })
 
+  const dateRangeUpdate = useSelector((state: ApplicationState) => {
+    return state.todoReducer.filterRange
+  })
   useEffect(() => {
-    console.log(todos)
-    setSortedTodo(todos)
+    let newSortedTodo = [...todos]
+    newSortedTodo = sortItem(newSortedTodo, sortType)
+    if (filterType !== FILTER_TYPE.DATE) {
+      newSortedTodo = filterItem(newSortedTodo, filterType)
+    } else {
+      newSortedTodo = filterDate(newSortedTodo, dateRangeUpdate)
+    }
+    setSortedTodo(newSortedTodo)
   }, [todos])
 
   useEffect(() => {
-    let newSortedTodo = [...sortedTodo]
+    let newSortedTodo = [...todos]
     newSortedTodo = sortItem(newSortedTodo, sortType)
-    console.log(newSortedTodo)
-    newSortedTodo = filterItem(newSortedTodo, filterType)
-    console.log(newSortedTodo)
+    if (filterType !== FILTER_TYPE.DATE) {
+      newSortedTodo = filterItem(newSortedTodo, filterType)
+    } else {
+      newSortedTodo = filterDate(newSortedTodo, dateRangeUpdate)
+    }
     setSortedTodo(newSortedTodo)
   }, [sortType, filterType])
 
@@ -92,11 +108,21 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     })
   }
 
+  const dateFilter = (): void => {
+    dispatch({
+      type: allAction.SET_MODAL,
+      Modal: new Modal(MODAL_TYPE.DATE_FILTER, true),
+      data: new Date(),
+    })
+  }
+
+  //Front end display are shown here:
   return (
     <div className="h-3/5">
       <div className="flex justify-between items-center">
         <p className="text-base-100 text-xl font-semibold mx-10">To-do list</p>
         <div className="flex justify-end gap-4 ">
+          {/*dropdown button class*/}
           <div className="relative mt-2 dropdown dropdown-hover">
             <label className="btn m-1 px-8">Filter by...</label>
             <ul className="absolute top-14 right-0 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -128,7 +154,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
                 <a
                   className="bg-orange-300 my-2 hover:bg-amber-600"
                   onClick={() => {
-                    onFilter(FILTER_TYPE.DATE)
+                    dateFilter()
                   }}>
                   Date
                 </a>
@@ -187,24 +213,45 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
                   Completed
                 </a>
               </li>
+              <li>
+                <a
+                  onClick={() => {
+                    onSort(SORT_TYPE.TAGS)
+                  }}>
+                  Tags
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
       <ul className="h-5/6 overflow-auto">
-        {sortedTodo.map((e: Todo, index: number) => {
-          return (
-            <TodoItem
-              key={index}
-              data={e}
-              onRemove={onRemove}
-              onEdit={onEdit}
-              setIsFinish={setIsFinish}
-            />
-          )
-        })}
+        <div className="article-feed">
+          {sortedTodo.map((e: Todo, index: number) => {
+            return (
+              //call TodoItems components here
+              <article className="article">
+                <TodoItem
+                  key={index}
+                  data={e}
+                  onRemove={onRemove}
+                  onEdit={onEdit}
+                  setIsFinish={setIsFinish}
+                />
+              </article>
+            )
+          })}
+        </div>
+
+        <div className="scroller-status">
+          <div className="infinite-scroll-request loader-ellips">...</div>
+          <p className="infinite-scroll-last">End of content</p>
+          <p className="infinite-scroll-error">No more pages to load</p>
+        </div>
       </ul>
+
+      {/*allow user input for next TodoItems*/}
       <div
         style={{
           padding: "10px",
@@ -227,6 +274,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
         />
       </div>
 
+      {/*submit*/}
       <button
         className="btn btn-wide btn-lg p-6 mt-2"
         onClick={() => {

@@ -3,6 +3,7 @@ import Modal from "../../Model/Modal"
 import { Reducer } from "react"
 import {
   CreateTodoModalDataType,
+  DateFilterModalDataType,
   DeleteTodoModalDataType,
   EditTodoModalDataType,
 } from "../../Model/ModalDataType"
@@ -10,7 +11,11 @@ import {
 interface actionTypes {
   type: string
   Modal: Modal
-  data: DeleteTodoModalDataType | EditTodoModalDataType | null
+  data:
+    | DeleteTodoModalDataType
+    | EditTodoModalDataType
+    | DateFilterModalDataType
+    | null
 }
 
 export interface modalInitStateType {
@@ -19,6 +24,7 @@ export interface modalInitStateType {
     | DeleteTodoModalDataType
     | EditTodoModalDataType
     | CreateTodoModalDataType
+    | DateFilterModalDataType
     | null
 }
 

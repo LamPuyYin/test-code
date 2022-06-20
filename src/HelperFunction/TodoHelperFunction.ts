@@ -31,6 +31,20 @@ const sortItem = (state: Todo[], sortType: SORT_TYPE): Todo[] => {
   } else if (sortType === SORT_TYPE.FINISHED) {
     const tmpArr: Todo[] = [...state]
     return tmpArr.sort((a, b) => Number(a.isFinish) - Number(b.isFinish))
+  } else if (sortType === SORT_TYPE.TAGS) {
+    const tmpArr: Todo[] = [...state]
+    return tmpArr.sort(function (a, b) {
+      const nameA = a.tag.toLowerCase(),
+        nameB = b.tag.toLowerCase()
+
+      if (nameA < nameB) {
+        return -1
+      }
+      if (nameA > nameB) {
+        return 1
+      }
+      return 0
+    })
   }
   console.log("error, invalid SORT_TYPE")
 
@@ -71,4 +85,19 @@ const filterItem = (state: Todo[], filterType: FILTER_TYPE): Todo[] => {
   return state
 }
 
-export { sortItem, filterItem }
+const filterDate = (state: Todo[], filterRange: [Date, Date]): Todo[] => {
+  const tmpArr: Todo[] = [...state]
+  return tmpArr.filter(function (item) {
+    const [startDate, endDate] = filterRange
+
+    startDate.setHours(0, 0, 0)
+    endDate.setHours(23, 59, 59)
+    console.log(startDate, endDate)
+    return (
+      item.deadLine.getTime() > startDate.getTime() &&
+      item.deadLine.getTime() < endDate.getTime()
+    )
+  })
+}
+
+export { sortItem, filterItem, filterDate }
