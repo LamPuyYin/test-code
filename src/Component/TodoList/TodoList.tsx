@@ -231,6 +231,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
           {sortedTodo.map((e: Todo, index: number) => {
             return (
               //call TodoItems components here
+              // eslint-disable-next-line react/jsx-key
               <article className="article">
                 <TodoItem
                   key={index}
@@ -242,12 +243,6 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
               </article>
             )
           })}
-        </div>
-
-        <div className="scroller-status">
-          <div className="infinite-scroll-request loader-ellips">...</div>
-          <p className="infinite-scroll-last">End of content</p>
-          <p className="infinite-scroll-error">No more pages to load</p>
         </div>
       </ul>
 
